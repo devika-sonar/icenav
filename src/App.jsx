@@ -78,6 +78,27 @@ function App() {
           {/* 🚢 */}
            Mission Planner
         </button>
+         <button 
+          className={`nav-button ${activeService === 'icebergs' ? 'active' : ''}`}
+          onClick={() => setActiveService('icebergs')}
+        >
+          {/* 🧊 */}
+           Alerts
+        </button>
+         <button 
+          className={`nav-button ${activeService === 'icebergs' ? 'active' : ''}`}
+          onClick={() => setActiveService('icebergs')}
+        >
+          {/* 🧊 */}
+           History
+        </button>
+         <button 
+          className={`nav-button ${activeService === 'icebergs' ? 'active' : ''}`}
+          onClick={() => setActiveService('icebergs')}
+        >
+          {/* 🧊 */}
+           Help
+        </button>
 
         <button 
           onClick={() => setIsAuthenticated(false)}
