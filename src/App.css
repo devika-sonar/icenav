@@ -1,0 +1,89 @@
+/* src/App.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f172a; /* Deep slate blue */
+  color: #f8fafc;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 280px;
+  background-color: #1e293b;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #334155;
+}
+
+.sidebar h1 {
+  font-size: 1.2rem;
+  color: #38bdf8; /* Ice blue */
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-button {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 15px;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #334155;
+  color: #f8fafc;
+}
+
+.nav-button.active {
+  background-color: #0369a1;
+  color: white;
+  font-weight: bold;
+}
+
+/* Main Content Area */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.map-placeholder {
+  flex-grow: 1;
+  background-color: #0b1120;
+  border: 2px dashed #334155;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #64748b;
+}
