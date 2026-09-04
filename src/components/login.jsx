@@ -26,17 +26,17 @@ export default function Login({ onLogin }) {
         boxShadow: '0 10px 25px rgba(0,0,0,0.5)' // Gives the card a floating effect
       }}>
         <h2 style={{ color: '#38bdf8', marginBottom: '10px', textAlign: 'center' }}>
-          Polaris Nav System
+          hehehehe
         </h2>
         <p style={{ color: '#94a3b8', marginBottom: '30px', textAlign: 'center', fontSize: '0.9rem' }}>
-          Restricted Access. Enter operator credentials.
+          LOGIN TO CONTINUE
         </p>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: '#cbd5e1' }}>
-              Operator ID / Email
+              Email ID
             </label>
             <input 
               required 
@@ -51,12 +51,12 @@ export default function Login({ onLogin }) {
 
           <div>
             <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.9rem', color: '#cbd5e1' }}>
-              Security Passkey
+              Password
             </label>
             <input 
               required 
               type="password" 
-              placeholder="••••••••" 
+              placeholder="Enter password" 
               style={{
                 width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #334155',
                 backgroundColor: '#0b1120', color: 'white', outline: 'none'
@@ -75,7 +75,7 @@ export default function Login({ onLogin }) {
               fontWeight: 'bold', cursor: isLoading ? 'not-allowed' : 'pointer', 
               transition: 'background-color 0.2s'
           }}>
-            {isLoading ? 'Authenticating...' : 'Initialize Session'}
+            {isLoading ? 'Authenticating...' : 'Login'}
           </button>
           
         </form>

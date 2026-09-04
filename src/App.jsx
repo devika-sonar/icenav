@@ -1,60 +1,60 @@
 // src/App.jsx
-import DataTable from './components/DataTable';
 import { useState, useEffect } from 'react';
 import './App.css';
 import PolarMap from './components/PolarMap';
 import MetricCard from './components/MetricCard';
-
+import DataTable from './components/DataTable';
+import Login from './components/login';
 
 function App() {
+  // 1. All our State Variables (This is what was giving you red lines!)
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeService, setActiveService] = useState('sea-ice');
-  
-  // NEW: State for the timeline slider and loading animation
   const [forecastDay, setForecastDay] = useState(0); 
   const [isCalculating, setIsCalculating] = useState(false);
 
-  // NEW: Fake an API call whenever the active tab changes
+  // 2. Fake API loading effect when tabs change
   useEffect(() => {
     setIsCalculating(true);
-    const timer = setTimeout(() => {
-      setIsCalculating(false);
-    }, 1500); // 1.5 second fake loading time
-    
+    const timer = setTimeout(() => setIsCalculating(false), 1500);
     return () => clearTimeout(timer);
   }, [activeService]);
 
-  // Handle the "Recalculate" button click
+  // 3. Fake API loading when button clicked
   const handleRecalculate = () => {
     setIsCalculating(true);
     setTimeout(() => setIsCalculating(false), 2000);
   };
 
+  // 4. THE GATEKEEPER: If not logged in, show Login Screen
+  if (!isAuthenticated) {
+    return <Login onLogin={() => setIsAuthenticated(true)} />;
+  }
+
+  // 5. THE MAIN DASHBOARD: Runs only if authenticated
   return (
     <div className="dashboard-container">
       {/* LEFT SIDEBAR */}
       <aside className="sidebar">
-        <h1>heheehe</h1>
+        <h1>Polaris Nav System</h1>
         
         <button 
           className={`nav-button ${activeService === 'sea-ice' ? 'active' : ''}`}
           onClick={() => setActiveService('sea-ice')}
         >
-          {/* ❄️  */}
-          Sea-Ice Forecast
+          ❄️ Sea-Ice Forecast
         </button>
         <button 
           className={`nav-button ${activeService === 'icebergs' ? 'active' : ''}`}
           onClick={() => setActiveService('icebergs')}
         >
-          {/* 🧊  */}
-          Iceberg Trajectories
+          🧊 Iceberg Trajectories
         </button>
         <button 
           className={`nav-button ${activeService === 'navigation' ? 'active' : ''}`}
           onClick={() => setActiveService('navigation')}
         >
-          {/* 🚢  */}
-          Safe Routing
+          🚢 Safe Routing
         </button>
       </aside>
 
@@ -62,18 +62,18 @@ function App() {
       <main className="main-content">
         <header className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>
-  {activeService === 'sea-ice' && (
-    <span style={{ color: '#8199b7' }}>Sea-Ice Concentration </span>
-  )}
-  {activeService === 'icebergs' && (
-    <span style={{ color: '#8199b7' }}>Iceberg Trajectory</span>
-  )}
-  {activeService === 'navigation' && (
-    <span style={{ color: '#8199b7' }}>Route Planner</span>
-  )}
-</h2>
+            {activeService === 'sea-ice' && (
+              <span style={{ color: '#f8fafc' }}>Sea-Ice Concentration (SIC)</span>
+            )}
+            {activeService === 'icebergs' && (
+              <span style={{ color: '#22d3ee' }}>Iceberg Collision Avoidance</span>
+            )}
+            {activeService === 'navigation' && (
+              <span style={{ color: '#4ade80' }}>Multi-Objective Route Planner</span>
+            )}
+          </h2>
           
-          {/* NEW: Forecast Timeline Slider */}
+          {/* Forecast Timeline Slider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', backgroundColor: '#1e293b', padding: '10px 20px', borderRadius: '8px' }}>
             <label style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
               Forecast: <strong>{forecastDay === 0 ? 'Today' : `+${forecastDay} Days`}</strong>
@@ -92,30 +92,36 @@ function App() {
 
         <div style={{ flexGrow: 1, display: 'flex', gap: '20px' }}>
           
-          {/* Map Container */}
-          <div style={{ flexGrow: 1, backgroundColor: '#0b1120', borderRadius: '12px', padding: '4px', position: 'relative' }}>
-              
-              {/* NEW: Loading Overlay over the Map */}
-              {isCalculating && (
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                  backgroundColor: 'rgba(11, 17, 32, 0.7)',
-                  zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center',
-                  color: '#38bdf8', fontSize: '1.2rem', fontWeight: 'bold', borderRadius: '12px'
-                }}>
-                  Recentring
-                </div>
-              )}
+          {/* MAP & TABLE CONTAINER (Left Side) */}
+          <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            
+            {/* Map Area */}
+            <div style={{ flexGrow: 1, backgroundColor: '#0b1120', borderRadius: '12px', padding: '4px', position: 'relative', minHeight: '400px' }}>
+                
+                {/* Loading Overlay */}
+                {isCalculating && (
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(11, 17, 32, 0.7)',
+                    zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    color: '#38bdf8', fontSize: '1.2rem', fontWeight: 'bold', borderRadius: '12px'
+                  }}>
+                    Running ML Inference...
+                  </div>
+                )}
 
-              <PolarMap activeService={activeService} forecastDay={forecastDay} />
+                <PolarMap activeService={activeService} forecastDay={forecastDay} />
+            </div>
+
+            {/* Data Table Area */}
+            <DataTable activeService={activeService} />
           </div>
 
-          {/* RIGHT SIDEBAR */}
+          {/* RIGHT SIDEBAR (Data Metrics) */}
           <aside style={{ width: '300px', display: 'flex', flexDirection: 'column' }}>
             
             {activeService === 'sea-ice' && (
               <>
-                {/* Notice how the value changes based on the slider! */}
                 <MetricCard title="Avg Ice Concentration" value={78 + forecastDay} unit="%" status="warning" />
                 <MetricCard title="Forecast Confidence" value={92 - (forecastDay * 2)} unit="%" status={forecastDay > 4 ? 'warning' : 'good'} />
               </>
@@ -143,10 +149,21 @@ function App() {
                 color: isCalculating ? '#94a3b8' : 'white', border: 'none', borderRadius: '8px',
                 fontWeight: 'bold', cursor: isCalculating ? 'not-allowed' : 'pointer'
             }}>
-              {isCalculating ? 'Computing...' : 'Recenter'}
+              {isCalculating ? 'Computing...' : 'Recalculate ML Model'}
             </button>
-          </aside>
+            
+            {/* NEW: Logout Button just in case! */}
+            <button 
+              onClick={() => setIsAuthenticated(false)}
+              style={{
+                marginTop: '10px', padding: '10px', backgroundColor: 'transparent',
+                color: '#ef4444', border: '1px solid #ef4444', borderRadius: '8px',
+                cursor: 'pointer'
+            }}>
+              Logout Operator
+            </button>
 
+          </aside>
         </div>
       </main>
     </div>
