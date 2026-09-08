@@ -30,7 +30,7 @@ export default function PolarMap({ activeService }) {
           new TileLayer({
             // OpenLayers will automatically take standard map tiles and mathematically 
             // reproject them to the South Pole view!
-            source: new OSM(), 
+            source: new OSM(),
           }),
         ],
         view: new View({
@@ -51,10 +51,9 @@ export default function PolarMap({ activeService }) {
   }, []);
 
   return (
-    <div 
-      ref={mapElement} 
-      // Added minHeight to guarantee the map doesn't collapse to 0px height
-      style={{ width: '100%', height: '100%', minHeight: '500px', borderRadius: '12px', overflow: 'hidden' }} 
+    <div
+      ref={mapElement}
+      style={{ width: '100%', height: '100%', minHeight: '300px', borderRadius: '12px', overflow: 'hidden' }}
     />
   );
 }

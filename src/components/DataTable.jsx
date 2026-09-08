@@ -13,70 +13,131 @@ export default function DataTable({ activeService }) {
     { waypoint: 3, lat: '-68.00', lon: '-48.00', speed: '10 knots', fuelRate: 'Ice-Breaker' },
   ];
 
-  // Common styling for table cells
-  const thStyle = { textAlign: 'left', padding: '12px', color: '#94a3b8', borderBottom: '1px solid #334155' };
-  const tdStyle = { padding: '12px', borderBottom: '1px solid #1e293b', color: '#f8fafc' };
+  // Refined styling for minimal table cells in the sidebar
+  const thStyle = {
+    textAlign: 'left',
+    padding: '9px 10px',
+    color: '#94a3b8',
+    fontSize: '0.72rem',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: '0.04em',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#0c121e',
+    whiteSpace: 'nowrap'
+  };
+
+  const tdStyle = {
+    padding: '9px 10px',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+    color: '#e2e8f0',
+    fontSize: '0.8rem',
+    whiteSpace: 'nowrap'
+  };
 
   return (
-    <div style={{ backgroundColor: '#1e293b', borderRadius: '8px', padding: '16px', marginTop: '20px' }}>
-      <h3 style={{ marginBottom: '16px', color: '#38bdf8' }}>
-        {activeService === 'icebergs' ? 'Detected Iceberg Logs' : 'Route Waypoint Details'}
+    <div style={{
+      backgroundColor: '#111827',
+      borderRadius: '10px',
+      border: '1px solid rgba(255, 255, 255, 0.07)',
+      padding: '14px 16px',
+      marginTop: '0',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <h3 style={{
+        marginBottom: '12px',
+        color: '#f8fafc',
+        fontSize: '0.86rem',
+        fontWeight: '600',
+        letterSpacing: '-0.01em',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <span>{activeService === 'icebergs' ? 'Detected Iceberg Logs' : (activeService === 'navigation' ? 'Route Telemetry Details' : 'Sea-Ice Grid Logs')}</span>
+        <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '500' }}>Live Telemetry</span>
       </h3>
       
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
-        <thead>
-          <tr>
-            {activeService === 'icebergs' ? (
-              <>
-                <th style={thStyle}>ID</th>
-                <th style={thStyle}>Latitude</th>
-                <th style={thStyle}>Longitude</th>
-                <th style={thStyle}>Size</th>
-                <th style={thStyle}>Collision Risk</th>
-              </>
-            ) : (
-              <>
-                <th style={thStyle}>Waypoint</th>
-                <th style={thStyle}>Latitude</th>
-                <th style={thStyle}>Longitude</th>
-                <th style={thStyle}>Target Speed</th>
-                <th style={thStyle}>Fuel Strategy</th>
-              </>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {activeService === 'icebergs' && icebergData.map((row) => (
-            <tr key={row.id}>
-              <td style={tdStyle}>{row.id}</td>
-              <td style={tdStyle}>{row.lat}</td>
-              <td style={tdStyle}>{row.lon}</td>
-              <td style={tdStyle}>{row.size}</td>
-              <td style={{ ...tdStyle, color: row.risk === 'High' ? '#f87171' : '#f8fafc' }}>
-                {row.risk}
-              </td>
-            </tr>
-          ))}
-
-          {activeService === 'navigation' && routeData.map((row) => (
-            <tr key={row.waypoint}>
-              <td style={tdStyle}>{row.waypoint}</td>
-              <td style={tdStyle}>{row.lat}</td>
-              <td style={tdStyle}>{row.lon}</td>
-              <td style={tdStyle}>{row.speed}</td>
-              <td style={{ ...tdStyle, color: '#4ade80' }}>{row.fuelRate}</td>
-            </tr>
-          ))}
-
-          {activeService === 'sea-ice' && (
+      <div style={{ overflowX: 'auto', borderRadius: '6px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+          <thead>
             <tr>
-              <td colSpan="5" style={{ ...tdStyle, textAlign: 'center', color: '#64748b' }}>
-                Gridded sea-ice data is optimized for map viewing. Raw tensor arrays hidden.
-              </td>
+              {activeService === 'icebergs' ? (
+                <>
+                  <th style={thStyle}>ID</th>
+                  <th style={thStyle}>Latitude</th>
+                  <th style={thStyle}>Longitude</th>
+                  <th style={thStyle}>Size</th>
+                  <th style={thStyle}>Risk</th>
+                </>
+              ) : (
+                <>
+                  <th style={thStyle}>Point</th>
+                  <th style={thStyle}>Latitude</th>
+                  <th style={thStyle}>Longitude</th>
+                  <th style={thStyle}>Speed</th>
+                  <th style={thStyle}>Fuel Plan</th>
+                </>
+              )}
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {activeService === 'icebergs' && icebergData.map((row) => (
+              <tr key={row.id} style={{ transition: 'background-color 0.15s' }}>
+                <td style={{ ...tdStyle, fontFamily: 'monospace', color: '#38bdf8', fontWeight: '600' }}>{row.id}</td>
+                <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{row.lat}</td>
+                <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{row.lon}</td>
+                <td style={tdStyle}>{row.size}</td>
+                <td style={tdStyle}>
+                  <span style={{
+                    padding: '2px 7px',
+                    borderRadius: '4px',
+                    fontSize: '0.72rem',
+                    fontWeight: '600',
+                    backgroundColor: row.risk === 'High' ? 'rgba(248, 113, 113, 0.12)' : 'rgba(56, 189, 248, 0.1)',
+                    color: row.risk === 'High' ? '#f87171' : (row.risk === 'Medium' ? '#fbbf24' : '#34d399'),
+                    border: `1px solid ${row.risk === 'High' ? 'rgba(248, 113, 113, 0.25)' : 'rgba(255, 255, 255, 0.08)'}`
+                  }}>
+                    {row.risk}
+                  </span>
+                </td>
+              </tr>
+            ))}
+
+            {activeService === 'navigation' && routeData.map((row) => (
+              <tr key={row.waypoint} style={{ transition: 'background-color 0.15s' }}>
+                <td style={{ ...tdStyle, fontWeight: '600', color: '#94a3b8' }}>#{row.waypoint}</td>
+                <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{row.lat}</td>
+                <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{row.lon}</td>
+                <td style={tdStyle}>{row.speed}</td>
+                <td style={tdStyle}>
+                  <span style={{
+                    padding: '2px 7px',
+                    borderRadius: '4px',
+                    fontSize: '0.72rem',
+                    fontWeight: '600',
+                    backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                    color: '#34d399',
+                    border: '1px solid rgba(52, 211, 153, 0.2)'
+                  }}>
+                    {row.fuelRate}
+                  </span>
+                </td>
+              </tr>
+            ))}
+
+            {activeService === 'sea-ice' && (
+              <tr>
+                <td colSpan="5" style={{ ...tdStyle, textAlign: 'center', color: '#64748b', padding: '18px 12px' }}>
+                  Gridded sea-ice data is rendered directly on map layer.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
