@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import FaqAccordionItem from './help/FaqAccordionItem';
 
 const FAQS = [
   {
@@ -24,8 +25,6 @@ export default function HelpView() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
-      
-      {/* FAQ / Manual Container */}
       <div style={{
         backgroundColor: '#111827',
         borderRadius: '10px',
@@ -35,7 +34,6 @@ export default function HelpView() {
         overflowY: 'auto',
         maxHeight: 'calc(100vh - 200px)'
       }}>
-        
         <div style={{ marginBottom: '20px' }}>
           <h3 style={{ color: '#f8fafc', fontSize: '1.1rem', fontWeight: '600', marginBottom: '6px' }}>
             Frequently Asked Questions (Operator FAQ)
@@ -47,52 +45,15 @@ export default function HelpView() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {FAQS.map((faq, idx) => (
-            <div
+            <FaqAccordionItem
               key={idx}
-              style={{
-                backgroundColor: '#0b111e',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                overflow: 'hidden',
-                transition: 'border-color 0.15s ease'
-              }}
-            >
-              <div
-                onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                style={{
-                  padding: '14px 18px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  color: '#f8fafc',
-                  fontWeight: '500',
-                  fontSize: '0.88rem'
-                }}
-              >
-                <span>{faq.q}</span>
-                <span style={{ color: '#38bdf8', fontSize: '1.1rem', fontWeight: '600', marginLeft: '12px' }}>
-                  {openFaq === idx ? '−' : '+'}
-                </span>
-              </div>
-              
-              {openFaq === idx && (
-                <div style={{
-                  padding: '0 18px 16px 18px',
-                  color: '#94a3b8',
-                  fontSize: '0.84rem',
-                  lineHeight: '1.6',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.04)'
-                }}>
-                  {faq.a}
-                </div>
-              )}
-            </div>
+              faq={faq}
+              isOpen={openFaq === idx}
+              onToggle={() => setOpenFaq(openFaq === idx ? null : idx)}
+            />
           ))}
         </div>
-
       </div>
-
     </div>
   );
 }
